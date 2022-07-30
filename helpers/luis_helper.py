@@ -5,7 +5,8 @@ from botbuilder.ai.luis import LuisRecognizer
 from botbuilder.core import TurnContext
 
 
-class LuisConstants:
+# class LuisConstants:
+class Intent:
     """Constants to be used in the LUIS examples."""
 
     BOOK_INTENT: Final[str] = "Book"
