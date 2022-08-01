@@ -5,7 +5,6 @@ from botbuilder.ai.luis import LuisRecognizer
 from botbuilder.core import TurnContext
 
 
-# class LuisConstants:
 class Intent:
     """Constants to be used in the LUIS examples."""
 
@@ -65,13 +64,13 @@ class LuisHelper:
             recognizer_result = await luis_recognizer.recognize(turn_context)
             intent = recognizer_result.get_top_scoring_intent().intent
 
-            if intent in LuisConstants.NOT_NONE_INTENTS:
+            if intent in Intent.NOT_NONE_INTENTS:
                 result = BookingDetails()
 
                 for (
                     entity_name,
                     entity_type,
-                ) in LuisConstants.ALL_ENTITIES.items():
+                ) in Intent.ALL_ENTITIES.items():
                     top_entity = await LuisHelper._get_top_entity(
                         recognizer_result, entity_name, entity_type
                     )
@@ -130,10 +129,10 @@ class LuisHelper:
 
         return (
             recognizer_result.entities.get(entity_type)[top_index].capitalize()
-            if entity_type == LuisConstants.LOCATION_TYPE
+            if entity_type == Intent.LOCATION_TYPE
             else recognizer_result.entities.get(entity_type)[top_index]["timex"][0]
-            if entity_type == LuisConstants.DATE_TYPE
+            if entity_type == Intent.DATE_TYPE
             else f"${recognizer_result.entities.get(entity_type)[top_index]}"
-            if entity_type == LuisConstants.QUANTITY_TYPE
+            if entity_type == Intent.QUANTITY_TYPE
             else None
         )
