@@ -1,4 +1,5 @@
 CoreBot with Application Insights (https://github.com/microsoft/BotBuilder-Samples/tree/main/samples/python/21.corebot-app-insights)
+
 Bot Framework v4 core bot sample.
 
 This bot has been created using Bot Framework, it shows how to:
@@ -34,18 +35,28 @@ ADAPTER.use(TELEMETRY_LOGGER_MIDDLEWARE)
 To try this sample
 Clone the repository
 git clone https://github.com/STEVENGOBAMI/BookFlight.git
+
 In a terminal, navigate to fligth-booking-bot folder
+
 Activate your desired virtual environment
+
 In the terminal, type pip install -r requirements.txt
+
 Run your bot with python app.py
+
 Testing the bot using Bot Framework Emulator
+
 Bot Framework Emulator is a desktop application that allows bot developers to test and debug their bots on localhost or running remotely through a tunnel.
 
 Install the latest Bot Framework Emulator from here
+
 Connect to the bot using Bot Framework Emulator
 Launch Bot Framework Emulator
+
 File -> Open Bot
+
 Enter a Bot URL of http://localhost:3978/api/messages
+
 Deploy the bot to Azure
 To learn more about deploying a bot to Azure, see Deploy your bot to Azure for a complete list of deployment instructions.
 
