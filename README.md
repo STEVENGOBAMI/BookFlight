@@ -61,17 +61,31 @@ Deploy the bot to Azure
 To learn more about deploying a bot to Azure, see Deploy your bot to Azure for a complete list of deployment instructions.
 
 Further reading
+
 Bot Framework Documentation
+
 Bot Basics
+
 Dialogs
+
 Gathering Input Using Prompts
+
 Activity processing
+
 Azure Bot Service Introduction
+
 Azure Bot Service Documentation
+
 Azure CLI
+
 Azure Portal
+
 Language Understanding using LUIS
+
 Channels and Bot Connector Service
+
 Application insights Overview
+
 Getting Started with Application Insights
+
 Filtering and preprocessing telemetry in the Application Insights SDK
