@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 """Handle date/time resolution for booking dialog."""
-
+from typing import Final
 from datatypes_date_time.timex import Timex
 
 from botbuilder.core import MessageFactory, BotTelemetryClient, NullTelemetryClient
@@ -18,6 +18,9 @@ from .cancel_and_help_dialog import CancelAndHelpDialog
 class DateResolverDialog(CancelAndHelpDialog):
     """Resolve the date"""
 
+    START_DATE_DIALOG_ID: Final[str] = "StartDateDialog"
+    END_DATE_DIALOG_ID: Final[str] = "EndDateDialog"
+
     def __init__(
         self,
         dialog_id: str = None,
@@ -26,6 +29,7 @@ class DateResolverDialog(CancelAndHelpDialog):
         super(DateResolverDialog, self).__init__(
             dialog_id or DateResolverDialog.__name__, telemetry_client
         )
+        self._dialog_id = dialog_id
         self.telemetry_client = telemetry_client
 
         date_time_prompt = DateTimePrompt(
@@ -49,11 +53,22 @@ class DateResolverDialog(CancelAndHelpDialog):
         """Prompt for the date."""
         timex = step_context.options
 
-        prompt_msg = "On what date would you like to travel?"
+        if self._dialog_id == DateResolverDialog.START_DATE_DIALOG_ID:
+            prompt_msg = "What date do you want to leave 🥳 ?"
+        elif self._dialog_id == DateResolverDialog.END_DATE_DIALOG_ID:
+            prompt_msg = "Please indicate your desired return date 😮‍💨"
+        else:
+            prompt_msg = "On what date would you like to travel?"
+
+        reprompt_msg = "I'm sorry, for best results, please enter your travel \
+            date including the month, day and year."
+
+
+        """prompt_msg = "On what date would you like to travel?"
         reprompt_msg = (
             "I'm sorry, for best results, please enter your travel "
             "date including the month, day and year."
-        )
+        )"""
 
         if timex is None:
             # We were not given any date at all so prompt the user.

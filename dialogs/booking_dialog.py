@@ -44,14 +44,14 @@ class BookingDialog(CancelAndHelpDialog):
         self.add_dialog(ConfirmPrompt(ConfirmPrompt.__name__))
         self.add_dialog(
             DateResolverDialog(
-                DateResolverDialog.__name__, self.telemetry_client
+                DateResolverDialog.START_DATE_DIALOG_ID, self.telemetry_client
             )
         )
-        # self.add_dialog(
-            # DateResolverDialog(
-                # DateResolverDialog.__name__, self.telemetry_client
-            # )
-        # )
+        self.add_dialog(
+            DateResolverDialog(
+                DateResolverDialog.END_DATE_DIALOG_ID, self.telemetry_client
+            )
+        )
         self.add_dialog(waterfall_dialog)
 
         self.initial_dialog_id = WaterfallDialog.__name__
@@ -66,7 +66,7 @@ class BookingDialog(CancelAndHelpDialog):
             return await step_context.prompt(
                 TextPrompt.__name__,
                 PromptOptions(
-                    prompt=MessageFactory.text("🛫 Where do you want to leave from ?")
+                    prompt=MessageFactory.text("🛫 From where do you want to leave ? (eg : London)")
                 ),
             )
 
@@ -85,7 +85,7 @@ class BookingDialog(CancelAndHelpDialog):
             return await step_context.prompt(
                 TextPrompt.__name__,
                 PromptOptions(
-                    prompt=MessageFactory.text("🛬 Where do you want to go to ?")
+                    prompt=MessageFactory.text("🛬 Where do you want to go ? (eg : Paris)")
                 ),
             )
 
@@ -101,14 +101,22 @@ class BookingDialog(CancelAndHelpDialog):
         # Capture the results of the previous step
         booking_details.dst_city = step_context.result.capitalize()
 
-        if booking_details.str_date is None:
+        if not booking_details.str_date or self.is_ambiguous(booking_details.str_date):
+            return await step_context.begin_dialog(
+                DateResolverDialog.START_DATE_DIALOG_ID,
+                booking_details.str_date,
+            )
+
+        return await step_context.next(booking_details.str_date)
+
+        """if booking_details.str_date is None:
             return await step_context.prompt(
                 TextPrompt.__name__,
                 PromptOptions(
-                    prompt=MessageFactory.text("What date do you want to leave")
+                    prompt=MessageFactory.text("What date do you want to leave ? (eg : 11th August 2023)")
                 ),
             )
-        return await step_context.next(booking_details.str_date)
+        return await step_context.next(booking_details.str_date)"""
 
     async def end_date_step(
         self, step_context: WaterfallStepContext
@@ -120,14 +128,21 @@ class BookingDialog(CancelAndHelpDialog):
         # Capture the results of the previous step
         booking_details.str_date = step_context.result.capitalize()
 
-        if booking_details.end_date is None:
+        if not booking_details.end_date or self.is_ambiguous(booking_details.end_date):
+            return await step_context.begin_dialog(
+                DateResolverDialog.END_DATE_DIALOG_ID, booking_details.end_date
+            )
+
+        return await step_context.next(booking_details.end_date)
+
+        """if booking_details.end_date is None:
             return await step_context.prompt(
                 TextPrompt.__name__,
                 PromptOptions(
-                    prompt=MessageFactory.text("Please indicate your desired return date")
+                    prompt=MessageFactory.text("Please indicate your desired return date (eg : 25th August 2022)")
                 ),
             )
-        return await step_context.next(booking_details.end_date)
+        return await step_context.next(booking_details.end_date)"""
 
 
     async def budget_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
@@ -142,7 +157,7 @@ class BookingDialog(CancelAndHelpDialog):
                 TextPrompt.__name__,
                 PromptOptions(
                     prompt=MessageFactory.text(
-                        "💸 What is your budget for this trip?"
+                        "💸 What is your budget for this trip ? (eg : $500)"
                     )
                 ),
             )

@@ -60,7 +60,7 @@ class MainDialog(ComponentDialog):
             await step_context.context.send_activity(
                 MessageFactory.text(
                     "NOTE: LUIS is not configured. To enable all capabilities, add 'LuisAppId', 'LuisAPIKey' and "
-                    "'LuisAPIHostName' to the appsettings.json file.",
+                    "'LuisAPIHostName' to the config.py file.",
                     input_hint=InputHints.ignoring_input,
                 )
             )
@@ -95,21 +95,32 @@ class MainDialog(ComponentDialog):
             self._luis_recognizer, step_context.context
         )
 
-        if intent in Intent.NOT_NONE_INTENTS and luis_result is not None:
+        if intent in Intent.NOT_NONE_INTENTS:
             # Run the BookingDialog when no intent is recognized.
             return await step_context.begin_dialog(self._booking_dialog_id, luis_result)
 
-        didnt_understand_text = (
-            "Sorry, I didn't get that. Please try asking in a different way"
-        )
-        didnt_understand_message = MessageFactory.text(
-            didnt_understand_text,
-            didnt_understand_text,
-            InputHints.ignoring_input,
-        )
-        await step_context.context.send_activity(didnt_understand_message)
+        else:
+            didnt_understand_text = (
+                "Sorry, I didn't get that. Please try asking in a different way"
+            )
+            didnt_understand_message = MessageFactory.text(
+                didnt_understand_text, didnt_understand_text, InputHints.ignoring_input
+            )
+            await step_context.context.send_activity(didnt_understand_message)
 
         return await step_context.next(None)
+       
+        """didnt_understand_text = (
+            "Sorry, I didn't get that. Please try asking in a different way"
+            )
+        didnt_understand_message = MessageFactory.text(
+                didnt_understand_text,
+                didnt_understand_text,
+                InputHints.ignoring_input,
+            )
+        await step_context.context.send_activity(didnt_understand_message)
+
+        return await step_context.next(None)"""
 
     async def final_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """
@@ -122,11 +133,7 @@ class MainDialog(ComponentDialog):
             msg = "Great!!! So you can pack your bags"
             message = MessageFactory.text(msg, msg, InputHints.ignoring_input)
             await step_context.context.send_activity(message)
-        # else:
-        #     # Now we have all the booking details call the booking service.
-        #     msg = "OK, thats too bad 😕"
-        #     message = MessageFactory.text(msg, msg, InputHints.ignoring_input)
-        #     await step_context.context.send_activity(message)
+
 
         prompt_message = "Do you want to book another trip ?"
         return await step_context.replace_dialog(self.id, prompt_message)
