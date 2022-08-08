@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Production'
+      name: 'Dev/Test'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -59,5 +59,5 @@ jobs:
         id: deploy-to-webapp
         with:
           app-name: 'appBookFligth'
-          slot-name: 'Production'
+          slot-name: 'Dev/Test'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E65C194295D64D728B45958210118707 }}
