@@ -2,7 +2,6 @@
 asyncio>=3.4.3
 requests==2.23.0
 botbuilder-core>=4.14.0
-aiohttp
 botframework-connector>=4.14.0
 botbuilder-schema>=4.14.0
 botbuilder-dialogs>=4.14.0
