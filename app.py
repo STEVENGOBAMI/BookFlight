@@ -53,7 +53,8 @@ ADAPTER = AdapterWithErrorHandler(SETTINGS, CONVERSATION_STATE)
 # Note the small 'client_queue_size'.  This is for demonstration purposes.  Larger queue sizes
 # result in fewer calls to ApplicationInsights, improving bot performance at the expense of
 # less frequent updates.
-INSTRUMENTATION_KEY = CONFIG.APPINSIGHTS_INSTRUMENTATION_KEY
+# INSTRUMENTATION_KEY = CONFIG.APPINSIGHTS_INSTRUMENTATION_KEY
+INSTRUMENTATION_KEY = "2f16a708-25d2-4f80-9d8b-8e1ca8855e37"
 TELEMETRY_CLIENT = ApplicationInsightsTelemetryClient(
     INSTRUMENTATION_KEY, telemetry_processor=AiohttpTelemetryProcessor(), client_queue_size=10
 )
